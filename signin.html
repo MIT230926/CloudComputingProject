@@ -160,15 +160,15 @@
   </main>
 
   <script>
-    function handleSignin(e) {
-      e.preventDefault();
-      const form = document.getElementById('signinForm');
-      const notice = document.getElementById('signinNotice');
-      form.style.opacity = '0.35';
-      form.style.pointerEvents = 'none';
-      notice.style.display = 'flex';
-      notice.scrollIntoView({ behavior: 'smooth', block: 'center' });
-    }
+function handleSignin(e) {
+  e.preventDefault();
+  const form = document.getElementById('signinForm');
+  const notice = document.getElementById('signinNotice');
+  form.style.opacity = '0.35';
+  form.style.pointerEvents = 'none';
+  notice.style.display = 'flex';
+  notice.scrollIntoView({ behavior: 'smooth', block: 'center' });
+}
 
     function switchTab(tab, btn) {
       document.querySelectorAll('.tab').forEach(t => t.classList.remove('tab--active'));
