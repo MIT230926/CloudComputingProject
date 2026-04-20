@@ -160,14 +160,36 @@
   </main>
 
   <script>
-    function handleSignin(e) {
+async function handleSignin(e) {
   e.preventDefault();
   const form = document.getElementById('signinForm');
   const notice = document.getElementById('signinNotice');
+  
+  const email = document.getElementById('signinEmail').value;
+  const password = document.getElementById('signinPassword').value;
+
   form.style.opacity = '0.35';
   form.style.pointerEvents = 'none';
-  notice.style.display = 'flex';
-  notice.scrollIntoView({ behavior: 'smooth', block: 'center' });
+
+  try {
+    const response = await fetch('http://20.5.146.110/api/login', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ email, password })
+    });
+
+    const data = await response.json();
+    
+    if (data.success) {
+      notice.style.display = 'flex';
+      notice.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }
+  } catch (err) {
+    console.error('Login failed:', err);
+    form.style.opacity = '1';
+    form.style.pointerEvents = 'auto';
+  }
+
 }
     function switchTab(tab, btn) {
       document.querySelectorAll('.tab').forEach(t => t.classList.remove('tab--active'));
