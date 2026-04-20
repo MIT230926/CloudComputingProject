@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Sign In — Lume Bank</title>
+  <link rel="stylesheet" href="style.css" />
+  <link rel="stylesheet" href="signin.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet"/>
+</head>
+<body class="signin-page">
+
+  <!-- BACKGROUND -->
+  <div class="signin-bg">
+    <div class="signin-bg__orb signin-bg__orb--1"></div>
+    <div class="signin-bg__orb signin-bg__orb--2"></div>
+    <div class="signin-bg__orb signin-bg__orb--3"></div>
+    <div class="signin-bg__grid"></div>
+  </div>
+
+  <!-- NAV -->
+  <nav class="nav">
+    <a href="index.html" class="nav__logo">
+      <span class="logo-mark">◈</span>
+      <span class="logo-text">Lume</span>
+    </a>
+    <a href="index.html" class="btn btn--ghost">← Home</a>
+  </nav>
+
+  <!-- SIGNIN LAYOUT -->
+  <main class="signin-main">
+
+    <!-- LEFT: Branding panel -->
+    <div class="signin-brand">
+      <div class="signin-brand__inner">
+        <div class="brand-logo">
+          <span class="logo-mark large-mark">◈</span>
+          <span class="logo-text brand-name">Lume</span>
+        </div>
+        <h2 class="brand-headline">Welcome<br/><em>back.</em></h2>
+        <p class="brand-sub">Your finances, always in focus.</p>
+
+        <div class="brand-card">
+          <div class="bc-chip"></div>
+          <div class="bc-label">Lume Black</div>
+          <div class="bc-number">•••• •••• •••• 4821</div>
+          <div class="bc-footer">
+            <span>Alex Morgan</span>
+            <span class="logo-mark small">◈</span>
+          </div>
+        </div>
+
+        <div class="brand-dots">
+          <span class="dot dot--active"></span>
+          <span class="dot"></span>
+          <span class="dot"></span>
+        </div>
+      </div>
+    </div>
+
+    <!-- RIGHT: Form panel -->
+    <div class="signin-form-wrap">
+      <div class="signin-form-inner">
+
+        <div class="signin-header">
+          <p class="section-eyebrow">Secure login</p>
+          <h1 class="signin-title">Sign in to<br/><em>your account.</em></h1>
+          <p class="signin-sub">Don't have one? <a href="signup.html">Create an account →</a></p>
+        </div>
+
+        <!-- TAB SWITCHER -->
+        <div class="tab-switcher">
+          <button class="tab tab--active" onclick="switchTab('email', this)">Email</button>
+          <button class="tab" onclick="switchTab('phone', this)">Phone</button>
+        </div>
+
+        <form class="signin-form" onsubmit="handleSignin(event)" id="signinForm">
+
+          <!-- Email login -->
+          <div class="tab-panel" id="panel-email">
+            <div class="field">
+              <label for="signinEmail">Email address</label>
+              <input type="email" id="signinEmail" name="email" placeholder="you@example.com" autocomplete="email"/>
+            </div>
+          </div>
+
+          <!-- Phone login -->
+          <div class="tab-panel hidden" id="panel-phone">
+            <div class="field">
+              <label for="signinPhone">Phone number</label>
+              <input type="tel" id="signinPhone" name="phone" placeholder="+61 400 000 000" autocomplete="tel"/>
+            </div>
+          </div>
+
+          <!-- Password -->
+          <div class="field">
+            <div class="field-label-row">
+              <label for="signinPassword">Password</label>
+              <a href="#" class="forgot-link">Forgot password?</a>
+            </div>
+            <div class="input-wrap">
+              <input type="password" id="signinPassword" name="password" placeholder="Enter your password"/>
+              <button type="button" class="toggle-pw" onclick="togglePw('signinPassword', this)" aria-label="Toggle password">👁</button>
+            </div>
+          </div>
+
+          <!-- Remember me -->
+          <label class="checkbox-row">
+            <input type="checkbox" id="remember" name="remember"/>
+            <span class="checkmark"></span>
+            <span>Keep me signed in for 30 days</span>
+          </label>
+
+          <!-- Submit -->
+          <button type="submit" class="btn btn--primary submit-btn">
+            <span>Sign In</span>
+            <span class="submit-arrow">→</span>
+          </button>
+
+          <!-- Divider -->
+          <div class="or-divider"><span>or continue with</span></div>
+
+          <!-- Social logins (decorative) -->
+          <div class="social-btns">
+            <button type="button" class="social-btn" onclick="socialNotice()">
+              <svg width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M17.64 9.2c0-.637-.057-1.251-.164-1.84H9v3.481h4.844c-.209 1.1-.843 2.031-1.796 2.658v2.21h2.908C16.658 14.091 17.64 11.858 17.64 9.2z" fill="#4285F4"/><path d="M9 18c2.43 0 4.467-.806 5.956-2.18l-2.908-2.259c-.806.54-1.837.86-3.048.86-2.344 0-4.328-1.584-5.036-3.711H.957v2.332C2.438 15.983 5.482 18 9 18z" fill="#34A853"/><path d="M3.964 10.71A5.41 5.41 0 0 1 3.682 9c0-.593.102-1.17.282-1.71V4.958H.957A8.996 8.996 0 0 0 0 9c0 1.452.348 2.827.957 4.042l3.007-2.332z" fill="#FBBC05"/><path d="M9 3.58c1.321 0 2.508.454 3.44 1.345l2.582-2.58C13.463.891 11.426 0 9 0 5.482 0 2.438 2.017.957 4.958L3.964 6.29C4.672 4.163 6.656 3.58 9 3.58z" fill="#EA4335"/></svg>
+              Google
+            </button>
+            <button type="button" class="social-btn" onclick="socialNotice()">
+              <svg width="18" height="18" viewBox="0 0 18 18" fill="currentColor"><path d="M9 0C4.03 0 0 4.03 0 9c0 3.98 2.58 7.35 6.16 8.54.45.08.61-.2.61-.44v-1.53c-2.5.54-3.03-1.2-3.03-1.2-.41-1.04-1-1.32-1-1.32-.82-.56.06-.55.06-.55.9.06 1.38.93 1.38.93.8 1.37 2.1.97 2.61.74.08-.58.31-.97.57-1.19-1.99-.23-4.08-1-4.08-4.43 0-.98.35-1.78.93-2.41-.09-.23-.4-1.14.09-2.37 0 0 .76-.24 2.49.93A8.66 8.66 0 0 1 9 4.28c.77 0 1.54.1 2.26.3 1.72-1.17 2.48-.93 2.48-.93.49 1.23.18 2.14.09 2.37.58.63.92 1.43.92 2.41 0 3.44-2.1 4.2-4.1 4.42.32.28.61.83.61 1.67v2.47c0 .24.16.53.62.44A9.01 9.01 0 0 0 18 9c0-4.97-4.03-9-9-9z"/></svg>
+              GitHub
+            </button>
+          </div>
+
+        </form>
+
+        <!-- Notice (shown on submit) -->
+        <div class="notice" id="signinNotice" style="display:none;">
+          <span class="notice__icon">🔐</span>
+          <div>
+            <strong>Login coming soon</strong>
+            <p>Our secure portal is launching shortly. We'll send you an email when it's ready.</p>
+          </div>
+        </div>
+
+        <!-- Social notice -->
+        <div class="notice notice--subtle" id="socialNotice" style="display:none;">
+          <span class="notice__icon">🚧</span>
+          <div>
+            <strong>Not available yet</strong>
+            <p>Social sign-in is on our roadmap — check back soon!</p>
+          </div>
+        </div>
+
+        <p class="signin-footer-note">Protected by 256-bit encryption &nbsp;·&nbsp; FDIC insured</p>
+
+      </div>
+    </div>
+
+  </main>
+
+  <script>
+    function handleSignin(e) {
+      e.preventDefault();
+      const form = document.getElementById('signinForm');
+      const notice = document.getElementById('signinNotice');
+      form.style.opacity = '0.35';
+      form.style.pointerEvents = 'none';
+      notice.style.display = 'flex';
+      notice.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }
+
+    function switchTab(tab, btn) {
+      document.querySelectorAll('.tab').forEach(t => t.classList.remove('tab--active'));
+      btn.classList.add('tab--active');
+      document.querySelectorAll('.tab-panel').forEach(p => p.classList.add('hidden'));
+      document.getElementById('panel-' + tab).classList.remove('hidden');
+    }
+
+    function togglePw(id, btn) {
+      const inp = document.getElementById(id);
+      inp.type = inp.type === 'password' ? 'text' : 'password';
+      btn.style.opacity = inp.type === 'text' ? '1' : '0.45';
+    }
+
+    function socialNotice() {
+      const n = document.getElementById('socialNotice');
+      n.style.display = 'flex';
+      setTimeout(() => { n.style.display = 'none'; }, 3500);
+    }
+  </script>
+
+</body>
+</html>
