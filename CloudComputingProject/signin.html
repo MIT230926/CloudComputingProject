@@ -172,7 +172,7 @@ async function handleSignin(e) {
   form.style.pointerEvents = 'none';
 
   try {
-    const response = await fetch('http://20.5.146.110/api/login', {
+    const response = await fetch('http://20.5.146.110:3000/api/login', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ email, password })
