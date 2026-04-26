@@ -199,17 +199,21 @@
 
   </main>
 
-  <script>
-    async function handleSubmit(e) {
+ <script>
+async function handleSubmit(e) {
   e.preventDefault();
   const form = document.getElementById('signupForm');
   const notice = document.getElementById('notice');
-
   const password = document.getElementById('password').value;
   const confirmPassword = document.getElementById('confirmPassword').value;
 
   if (password !== confirmPassword) {
     alert('Passwords do not match');
+    return;
+  }
+
+  if (!document.getElementById('terms').checked) {
+    alert('Please agree to the Terms of Service');
     return;
   }
 
@@ -234,11 +238,8 @@
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(payload)
     });
-
     const data = await response.json();
-
     if (data.success) {
-      // Save token and redirect
       localStorage.setItem('lume_token', data.token);
       localStorage.setItem('lume_user', JSON.stringify(data.user));
       window.location.href = 'dashboard.html';
@@ -247,14 +248,21 @@
       btn.disabled = false;
       btn.querySelector('.submit-btn__text').textContent = 'Create My Account';
     }
-
   } catch (err) {
     alert('Could not connect to server. Please try again.');
     btn.disabled = false;
     btn.querySelector('.submit-btn__text').textContent = 'Create My Account';
   }
-<<<<<<< HEAD
 }
-=======
+
+function togglePassword(fieldId, btn) {
+  const input = document.getElementById(fieldId);
+  if (input.type === 'password') {
+    input.type = 'text';
+    btn.style.opacity = '1';
+  } else {
+    input.type = 'password';
+    btn.style.opacity = '0.45';
+  }
 }
->>>>>>> f9ca0eadee249624f1a22865cafd676007c1e2d5
+</script>

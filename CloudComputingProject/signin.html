@@ -159,56 +159,70 @@
 
   </main>
 
-  <script>
-async function handleSignin(e) {
+<script>
+async function handleSubmit(e) {
   e.preventDefault();
-  const form = document.getElementById('signinForm');
-  const notice = document.getElementById('signinNotice');
+  const form = document.getElementById('signupForm');
+  const notice = document.getElementById('notice');
+  const password = document.getElementById('password').value;
+  const confirmPassword = document.getElementById('confirmPassword').value;
 
-  const email = document.getElementById('signinEmail').value;
-  const password = document.getElementById('signinPassword').value;
+  if (password !== confirmPassword) {
+    alert('Passwords do not match');
+    return;
+  }
 
-  // Show loading state
+  if (!document.getElementById('terms').checked) {
+    alert('Please agree to the Terms of Service');
+    return;
+  }
+
   const btn = form.querySelector('.submit-btn');
   btn.disabled = true;
-  btn.querySelector('span').textContent = 'Signing in...';
+  btn.querySelector('.submit-btn__text').textContent = 'Creating account...';
+
+  const payload = {
+    firstName: document.getElementById('firstName').value,
+    lastName: document.getElementById('lastName').value,
+    email: document.getElementById('email').value,
+    password,
+    phone: document.getElementById('phone').value,
+    dob: document.getElementById('dob').value,
+    address: document.getElementById('address').value,
+    accountType: document.querySelector('input[name="accountType"]:checked').value
+  };
 
   try {
-    const response = await fetch('http://20.5.146.110:3000/api/login', {
+    const response = await fetch('http://20.5.146.110:3000/api/register', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ email, password })
+      body: JSON.stringify(payload)
     });
-
     const data = await response.json();
-
     if (data.success) {
-      // Save JWT token and user info
       localStorage.setItem('lume_token', data.token);
       localStorage.setItem('lume_user', JSON.stringify(data.user));
-
-      // Redirect to dashboard (we'll build this next)
       window.location.href = 'dashboard.html';
     } else {
-      // Show real error message
-      notice.style.display = 'flex';
-      notice.querySelector('strong').textContent = 'Login failed';
-      notice.querySelector('p').textContent = data.message || 'Invalid email or password';
-      notice.querySelector('.notice__icon').textContent = '❌';
+      alert(data.message || 'Registration failed');
       btn.disabled = false;
-      btn.querySelector('span').textContent = 'Sign In';
+      btn.querySelector('.submit-btn__text').textContent = 'Create My Account';
     }
-
   } catch (err) {
-    notice.style.display = 'flex';
-    notice.querySelector('strong').textContent = 'Connection error';
-    notice.querySelector('p').textContent = 'Could not reach the server. Try again.';
-    notice.querySelector('.notice__icon').textContent = '⚠️';
+    alert('Could not connect to server. Please try again.');
     btn.disabled = false;
-    btn.querySelector('span').textContent = 'Sign In';
+    btn.querySelector('.submit-btn__text').textContent = 'Create My Account';
   }
-<<<<<<< HEAD
 }
-=======
+
+function togglePassword(fieldId, btn) {
+  const input = document.getElementById(fieldId);
+  if (input.type === 'password') {
+    input.type = 'text';
+    btn.style.opacity = '1';
+  } else {
+    input.type = 'password';
+    btn.style.opacity = '0.45';
+  }
 }
->>>>>>> f9ca0eadee249624f1a22865cafd676007c1e2d5
+</script>
