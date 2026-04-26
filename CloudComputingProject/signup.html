@@ -200,27 +200,57 @@
   </main>
 
   <script>
-    function handleSubmit(e) {
-      e.preventDefault();
-      const notice = document.getElementById('notice');
-      const form = document.getElementById('signupForm');
-      form.style.opacity = '0.4';
-      form.style.pointerEvents = 'none';
-      notice.style.display = 'flex';
-      notice.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    async function handleSubmit(e) {
+  e.preventDefault();
+  const form = document.getElementById('signupForm');
+  const notice = document.getElementById('notice');
+
+  const password = document.getElementById('password').value;
+  const confirmPassword = document.getElementById('confirmPassword').value;
+
+  if (password !== confirmPassword) {
+    alert('Passwords do not match');
+    return;
+  }
+
+  const btn = form.querySelector('.submit-btn');
+  btn.disabled = true;
+  btn.querySelector('.submit-btn__text').textContent = 'Creating account...';
+
+  const payload = {
+    firstName: document.getElementById('firstName').value,
+    lastName: document.getElementById('lastName').value,
+    email: document.getElementById('email').value,
+    password,
+    phone: document.getElementById('phone').value,
+    dob: document.getElementById('dob').value,
+    address: document.getElementById('address').value,
+    accountType: document.querySelector('input[name="accountType"]:checked').value
+  };
+
+  try {
+    const response = await fetch('http://20.5.146.110:3000/api/register', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload)
+    });
+
+    const data = await response.json();
+
+    if (data.success) {
+      // Save token and redirect
+      localStorage.setItem('lume_token', data.token);
+      localStorage.setItem('lume_user', JSON.stringify(data.user));
+      window.location.href = 'dashboard.html';
+    } else {
+      alert(data.message || 'Registration failed');
+      btn.disabled = false;
+      btn.querySelector('.submit-btn__text').textContent = 'Create My Account';
     }
 
-    function togglePassword(fieldId, btn) {
-      const input = document.getElementById(fieldId);
-      if (input.type === 'password') {
-        input.type = 'text';
-        btn.style.opacity = '1';
-      } else {
-        input.type = 'password';
-        btn.style.opacity = '0.45';
-      }
-    }
-  </script>
-
-</body>
-</html>
+  } catch (err) {
+    alert('Could not connect to server. Please try again.');
+    btn.disabled = false;
+    btn.querySelector('.submit-btn__text').textContent = 'Create My Account';
+  }
+}

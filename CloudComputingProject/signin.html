@@ -164,12 +164,14 @@ async function handleSignin(e) {
   e.preventDefault();
   const form = document.getElementById('signinForm');
   const notice = document.getElementById('signinNotice');
-  
+
   const email = document.getElementById('signinEmail').value;
   const password = document.getElementById('signinPassword').value;
 
-  form.style.opacity = '0.35';
-  form.style.pointerEvents = 'none';
+  // Show loading state
+  const btn = form.querySelector('.submit-btn');
+  btn.disabled = true;
+  btn.querySelector('span').textContent = 'Signing in...';
 
   try {
     const response = await fetch('http://20.5.146.110:3000/api/login', {
@@ -179,37 +181,30 @@ async function handleSignin(e) {
     });
 
     const data = await response.json();
-    
+
     if (data.success) {
+      // Save JWT token and user info
+      localStorage.setItem('lume_token', data.token);
+      localStorage.setItem('lume_user', JSON.stringify(data.user));
+
+      // Redirect to dashboard (we'll build this next)
+      window.location.href = 'dashboard.html';
+    } else {
+      // Show real error message
       notice.style.display = 'flex';
-      notice.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      notice.querySelector('strong').textContent = 'Login failed';
+      notice.querySelector('p').textContent = data.message || 'Invalid email or password';
+      notice.querySelector('.notice__icon').textContent = '❌';
+      btn.disabled = false;
+      btn.querySelector('span').textContent = 'Sign In';
     }
+
   } catch (err) {
-    console.error('Login failed:', err);
-    form.style.opacity = '1';
-    form.style.pointerEvents = 'auto';
+    notice.style.display = 'flex';
+    notice.querySelector('strong').textContent = 'Connection error';
+    notice.querySelector('p').textContent = 'Could not reach the server. Try again.';
+    notice.querySelector('.notice__icon').textContent = '⚠️';
+    btn.disabled = false;
+    btn.querySelector('span').textContent = 'Sign In';
   }
-
 }
-    function switchTab(tab, btn) {
-      document.querySelectorAll('.tab').forEach(t => t.classList.remove('tab--active'));
-      btn.classList.add('tab--active');
-      document.querySelectorAll('.tab-panel').forEach(p => p.classList.add('hidden'));
-      document.getElementById('panel-' + tab).classList.remove('hidden');
-    }
-
-    function togglePw(id, btn) {
-      const inp = document.getElementById(id);
-      inp.type = inp.type === 'password' ? 'text' : 'password';
-      btn.style.opacity = inp.type === 'text' ? '1' : '0.45';
-    }
-
-    function socialNotice() {
-      const n = document.getElementById('socialNotice');
-      n.style.display = 'flex';
-      setTimeout(() => { n.style.display = 'none'; }, 3500);
-    }
-  </script>
-
-</body>
-</html>
