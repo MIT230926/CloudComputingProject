@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -608,3 +609,615 @@
 
 </body>
 </html>
+=======
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Dashboard — Lume Bank</title>
+  <link rel="stylesheet" href="style.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet"/>
+  <style>
+    /* ── Dashboard base ── */
+    .dashboard-page {
+      background: var(--navy-900);
+      min-height: 100vh;
+    }
+
+    /* ── Background ── */
+    .dash-bg {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 0;
+    }
+    .dash-bg__grid {
+      position: absolute;
+      inset: 0;
+      background-image:
+        linear-gradient(rgba(245,166,35,0.03) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(245,166,35,0.03) 1px, transparent 1px);
+      background-size: 60px 60px;
+    }
+    .dash-bg__orb {
+      position: absolute;
+      border-radius: 50%;
+      filter: blur(120px);
+    }
+    .dash-bg__orb--1 {
+      width: 600px; height: 600px;
+      background: radial-gradient(circle, rgba(245,166,35,0.07) 0%, transparent 70%);
+      top: -100px; right: -100px;
+    }
+    .dash-bg__orb--2 {
+      width: 400px; height: 400px;
+      background: radial-gradient(circle, rgba(26,58,120,0.25) 0%, transparent 70%);
+      bottom: 0; left: 0;
+    }
+
+    /* ── Nav override for dashboard ── */
+    .dashboard-page .nav {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 4vw;
+      height: 72px;
+      border-bottom: 1px solid var(--border);
+      background: rgba(10,14,35,0.85);
+      backdrop-filter: blur(12px);
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 100;
+    }
+    .nav__right {
+      display: flex;
+      align-items: center;
+      gap: 1.2rem;
+    }
+    .nav__user {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 0.85rem;
+      color: var(--text-muted);
+    }
+    .nav__avatar {
+      width: 34px; height: 34px;
+      border-radius: 50%;
+      background: rgba(245,166,35,0.15);
+      border: 1px solid rgba(245,166,35,0.3);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.85rem;
+      color: var(--amber-300);
+      font-weight: 500;
+    }
+
+    /* ── Layout ── */
+    .dash-wrap {
+      position: relative;
+      z-index: 1;
+      padding: 100px 4vw 4rem;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    /* ── Welcome header ── */
+    .dash-header {
+      margin-bottom: 2.5rem;
+      animation: fade-up 0.5s ease forwards;
+    }
+    .dash-header__eyebrow {
+      font-size: 0.75rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--amber-400);
+      margin-bottom: 0.4rem;
+    }
+    .dash-header__title {
+      font-family: var(--font-display);
+      font-size: clamp(1.8rem, 3vw, 2.8rem);
+      font-weight: 300;
+      color: var(--cream);
+      line-height: 1.15;
+    }
+    .dash-header__title em { font-style: italic; }
+    .dash-header__sub {
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      margin-top: 0.4rem;
+    }
+
+    /* ── Stats row ── */
+    .dash-stats {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1rem;
+      margin-bottom: 2rem;
+      animation: fade-up 0.5s 0.1s ease both;
+    }
+
+    .stat-card {
+      background: var(--navy-800);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 1.6rem 1.8rem;
+      position: relative;
+      overflow: hidden;
+      transition: border-color 0.25s ease, transform 0.25s ease;
+    }
+    .stat-card:hover {
+      border-color: rgba(245,166,35,0.3);
+      transform: translateY(-2px);
+    }
+    .stat-card__glow {
+      position: absolute;
+      top: 0; right: 0;
+      width: 120px; height: 120px;
+      background: radial-gradient(circle, rgba(245,166,35,0.06) 0%, transparent 70%);
+      pointer-events: none;
+    }
+    .stat-card__label {
+      font-size: 0.72rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      margin-bottom: 0.6rem;
+    }
+    .stat-card__value {
+      font-family: var(--font-display);
+      font-size: 2rem;
+      font-weight: 300;
+      color: var(--cream);
+      line-height: 1;
+      margin-bottom: 0.4rem;
+    }
+    .stat-card__change {
+      font-size: 0.75rem;
+      color: #4ade80;
+    }
+    .stat-card--highlight {
+      border-color: rgba(245,166,35,0.25);
+      background: rgba(245,166,35,0.04);
+    }
+
+    /* ── Main grid ── */
+    .dash-grid {
+      display: grid;
+      grid-template-columns: 1fr 340px;
+      gap: 1.5rem;
+      animation: fade-up 0.5s 0.2s ease both;
+    }
+
+    /* ── Card base ── */
+    .dash-card {
+      background: var(--navy-800);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      overflow: hidden;
+    }
+    .dash-card__head {
+      padding: 1.4rem 1.8rem;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .dash-card__title {
+      font-size: 0.8rem;
+      font-weight: 500;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+    }
+    .dash-card__action {
+      font-size: 0.78rem;
+      color: var(--amber-300);
+      text-decoration: none;
+      opacity: 0.8;
+      transition: opacity 0.2s;
+    }
+    .dash-card__action:hover { opacity: 1; }
+
+    /* ── Transactions ── */
+    .txn-list {
+      padding: 0.5rem 0;
+    }
+    .txn {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      padding: 1rem 1.8rem;
+      border-bottom: 1px solid rgba(255,255,255,0.04);
+      transition: background 0.2s;
+    }
+    .txn:last-child { border-bottom: none; }
+    .txn:hover { background: rgba(245,166,35,0.03); }
+    .txn__icon {
+      width: 38px; height: 38px;
+      border-radius: 10px;
+      background: var(--navy-700);
+      border: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1rem;
+      flex-shrink: 0;
+    }
+    .txn__info { flex: 1; }
+    .txn__name {
+      font-size: 0.88rem;
+      color: var(--cream);
+      font-weight: 400;
+      margin-bottom: 2px;
+    }
+    .txn__date {
+      font-size: 0.74rem;
+      color: var(--text-muted);
+    }
+    .txn__amount {
+      font-size: 0.92rem;
+      font-weight: 500;
+    }
+    .txn__amount--debit { color: var(--cream); }
+    .txn__amount--credit { color: #4ade80; }
+
+    /* ── Quick actions ── */
+    .quick-actions {
+      padding: 1.2rem 1.8rem;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0.75rem;
+    }
+    .qa-btn {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 8px;
+      padding: 1.2rem 0.8rem;
+      background: var(--navy-700);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      cursor: pointer;
+      transition: all 0.25s ease;
+      font-family: var(--font-body);
+      text-align: center;
+    }
+    .qa-btn:hover {
+      border-color: rgba(245,166,35,0.4);
+      background: rgba(245,166,35,0.06);
+      transform: translateY(-2px);
+    }
+    .qa-btn__icon { font-size: 1.3rem; }
+    .qa-btn__label {
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      font-weight: 400;
+    }
+
+    /* ── Mini bank card ── */
+    .dash-bank-card {
+      margin: 1.4rem 1.8rem;
+      background: linear-gradient(135deg, #1a1f4e 0%, #0d1235 100%);
+      border: 1px solid rgba(245,166,35,0.2);
+      border-radius: 16px;
+      padding: 1.6rem 1.8rem;
+      position: relative;
+      overflow: hidden;
+    }
+    .dash-bank-card::before {
+      content: '';
+      position: absolute;
+      top: -40px; right: -40px;
+      width: 160px; height: 160px;
+      background: radial-gradient(circle, rgba(245,166,35,0.1) 0%, transparent 70%);
+    }
+    .dbc__chip {
+      width: 32px; height: 24px;
+      background: linear-gradient(135deg, rgba(245,166,35,0.6), rgba(245,166,35,0.3));
+      border-radius: 4px;
+      margin-bottom: 1.4rem;
+    }
+    .dbc__label {
+      font-size: 0.7rem;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: rgba(245,166,35,0.6);
+      margin-bottom: 0.5rem;
+    }
+    .dbc__number {
+      font-family: var(--font-display);
+      font-size: 1.05rem;
+      color: rgba(255,255,255,0.5);
+      letter-spacing: 0.12em;
+      margin-bottom: 1.2rem;
+    }
+    .dbc__footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .dbc__name {
+      font-size: 0.82rem;
+      color: var(--cream);
+      letter-spacing: 0.06em;
+    }
+    .dbc__mark {
+      color: rgba(245,166,35,0.5);
+      font-size: 1.1rem;
+    }
+
+    /* ── Security badge ── */
+    .security-badge {
+      margin: 0 1.8rem 1.4rem;
+      padding: 0.9rem 1.1rem;
+      background: rgba(74,222,128,0.06);
+      border: 1px solid rgba(74,222,128,0.15);
+      border-radius: var(--radius-sm);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 0.78rem;
+      color: rgba(74,222,128,0.8);
+    }
+
+    /* ── Sign out ── */
+    .signout-btn {
+      background: none;
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      padding: 8px 16px;
+      color: var(--text-muted);
+      font-family: var(--font-body);
+      font-size: 0.8rem;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .signout-btn:hover {
+      border-color: rgba(245,166,35,0.3);
+      color: var(--cream);
+    }
+
+    /* ── Right column ── */
+    .dash-right {
+      display: flex;
+      flex-direction: column;
+      gap: 1.5rem;
+    }
+
+    /* ── Animations ── */
+    @keyframes fade-up {
+      from { opacity: 0; transform: translateY(16px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    /* ── Responsive ── */
+    @media (max-width: 900px) {
+      .dash-grid { grid-template-columns: 1fr; }
+      .dash-stats { grid-template-columns: 1fr 1fr; }
+    }
+    @media (max-width: 540px) {
+      .dash-stats { grid-template-columns: 1fr; }
+      .dash-wrap { padding: 90px 5vw 3rem; }
+    }
+  </style>
+</head>
+<body class="dashboard-page">
+
+  <!-- Background -->
+  <div class="dash-bg">
+    <div class="dash-bg__grid"></div>
+    <div class="dash-bg__orb dash-bg__orb--1"></div>
+    <div class="dash-bg__orb dash-bg__orb--2"></div>
+  </div>
+
+  <!-- Nav -->
+  <nav class="nav">
+    <a href="index.html" class="nav__logo">
+      <span class="logo-mark">◈</span>
+      <span class="logo-text">Lume</span>
+    </a>
+    <div class="nav__right">
+      <div class="nav__user">
+        <div class="nav__avatar" id="navAvatar">?</div>
+        <span id="navName">Loading...</span>
+      </div>
+      <button class="signout-btn" onclick="signOut()">Sign out</button>
+    </div>
+  </nav>
+
+  <!-- Main -->
+  <div class="dash-wrap">
+
+    <!-- Welcome header -->
+    <div class="dash-header">
+      <p class="dash-header__eyebrow">Dashboard</p>
+      <h1 class="dash-header__title">Welcome back, <em id="welcomeName">...</em></h1>
+      <p class="dash-header__sub" id="welcomeSub">Loading your account...</p>
+    </div>
+
+    <!-- Stats -->
+    <div class="dash-stats">
+      <div class="stat-card stat-card--highlight">
+        <div class="stat-card__glow"></div>
+        <div class="stat-card__label">Total balance</div>
+        <div class="stat-card__value">$12,482.50</div>
+        <div class="stat-card__change">↑ +2.4% this month</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-card__glow"></div>
+        <div class="stat-card__label">Monthly spending</div>
+        <div class="stat-card__value">$3,241.00</div>
+        <div class="stat-card__change" style="color:var(--text-muted)">Last 30 days</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-card__glow"></div>
+        <div class="stat-card__label">Savings goal</div>
+        <div class="stat-card__value">68%</div>
+        <div class="stat-card__change">↑ On track</div>
+      </div>
+    </div>
+
+    <!-- Main grid -->
+    <div class="dash-grid">
+
+      <!-- Left: Transactions -->
+      <div class="dash-card">
+        <div class="dash-card__head">
+          <span class="dash-card__title">Recent transactions</span>
+          <a href="#" class="dash-card__action">View all →</a>
+        </div>
+        <div class="txn-list">
+          <div class="txn">
+            <div class="txn__icon">🛒</div>
+            <div class="txn__info">
+              <div class="txn__name">Woolworths</div>
+              <div class="txn__date">Today, 9:42 AM</div>
+            </div>
+            <div class="txn__amount txn__amount--debit">−$84.20</div>
+          </div>
+          <div class="txn">
+            <div class="txn__icon">💼</div>
+            <div class="txn__info">
+              <div class="txn__name">Salary deposit</div>
+              <div class="txn__date">Yesterday, 12:00 PM</div>
+            </div>
+            <div class="txn__amount txn__amount--credit">+$4,200.00</div>
+          </div>
+          <div class="txn">
+            <div class="txn__icon">⚡</div>
+            <div class="txn__info">
+              <div class="txn__name">Origin Energy</div>
+              <div class="txn__date">25 Apr, 8:15 AM</div>
+            </div>
+            <div class="txn__amount txn__amount--debit">−$142.60</div>
+          </div>
+          <div class="txn">
+            <div class="txn__icon">🎵</div>
+            <div class="txn__info">
+              <div class="txn__name">Spotify</div>
+              <div class="txn__date">24 Apr, 12:00 AM</div>
+            </div>
+            <div class="txn__amount txn__amount--debit">−$11.99</div>
+          </div>
+          <div class="txn">
+            <div class="txn__icon">🍜</div>
+            <div class="txn__info">
+              <div class="txn__name">Uber Eats</div>
+              <div class="txn__date">23 Apr, 7:30 PM</div>
+            </div>
+            <div class="txn__amount txn__amount--debit">−$38.50</div>
+          </div>
+          <div class="txn">
+            <div class="txn__icon">🏠</div>
+            <div class="txn__info">
+              <div class="txn__name">Rent payment</div>
+              <div class="txn__date">22 Apr, 9:00 AM</div>
+            </div>
+            <div class="txn__amount txn__amount--debit">−$1,650.00</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Right column -->
+      <div class="dash-right">
+
+        <!-- Bank card -->
+        <div class="dash-card">
+          <div class="dash-card__head">
+            <span class="dash-card__title">Your card</span>
+            <a href="#" class="dash-card__action">Manage →</a>
+          </div>
+          <div class="dash-bank-card">
+            <div class="dbc__chip"></div>
+            <div class="dbc__label">Lume Black</div>
+            <div class="dbc__number">•••• •••• •••• 4821</div>
+            <div class="dbc__footer">
+              <span class="dbc__name" id="cardName">— —</span>
+              <span class="dbc__mark">◈</span>
+            </div>
+          </div>
+          <div class="security-badge">
+            <span>🔒</span>
+            <span>Card active · 256-bit encrypted</span>
+          </div>
+        </div>
+
+        <!-- Quick actions -->
+        <div class="dash-card">
+          <div class="dash-card__head">
+            <span class="dash-card__title">Quick actions</span>
+          </div>
+          <div class="quick-actions">
+            <button class="qa-btn" onclick="comingSoon()">
+              <span class="qa-btn__icon">↗</span>
+              <span class="qa-btn__label">Send money</span>
+            </button>
+            <button class="qa-btn" onclick="comingSoon()">
+              <span class="qa-btn__icon">↙</span>
+              <span class="qa-btn__label">Receive</span>
+            </button>
+            <button class="qa-btn" onclick="comingSoon()">
+              <span class="qa-btn__icon">💳</span>
+              <span class="qa-btn__label">Pay bill</span>
+            </button>
+            <button class="qa-btn" onclick="comingSoon()">
+              <span class="qa-btn__icon">📊</span>
+              <span class="qa-btn__label">Insights</span>
+            </button>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // ── Auth guard — redirect if not logged in ──
+    const token = localStorage.getItem('lume_token');
+    const userRaw = localStorage.getItem('lume_user');
+
+    if (!token || !userRaw) {
+      window.location.href = 'signin.html';
+    }
+
+    // ── Populate UI with user data ──
+    const user = JSON.parse(userRaw);
+    const firstName = user.firstName || 'there';
+    const lastName = user.lastName || '';
+    const fullName = `${firstName} ${lastName}`.trim();
+    const initials = (firstName[0] + (lastName[0] || '')).toUpperCase();
+
+    document.getElementById('welcomeName').textContent = firstName;
+    document.getElementById('welcomeSub').textContent =
+      `${new Date().toLocaleDateString('en-AU', { weekday:'long', year:'numeric', month:'long', day:'numeric' })} · Lume Black account`;
+    document.getElementById('navName').textContent = fullName;
+    document.getElementById('navAvatar').textContent = initials;
+    document.getElementById('cardName').textContent = fullName.toUpperCase();
+
+    // ── Verify token with backend ──
+    fetch('http://20.5.146.110:3000/api/health')
+      .then(r => r.json())
+      .then(data => {
+        if (data.status !== 'online') signOut();
+      })
+      .catch(() => {
+        console.warn('Backend unreachable — staying on dashboard');
+      });
+
+    function signOut() {
+      localStorage.removeItem('lume_token');
+      localStorage.removeItem('lume_user');
+      window.location.href = 'signin.html';
+    }
+
+    function comingSoon() {
+      alert('This feature is coming soon!');
+    }
+  </script>
+
+</body>
+</html>
+>>>>>>> f9ca0eadee249624f1a22865cafd676007c1e2d5
