@@ -200,7 +200,7 @@
   </main>
 
   <script>
-    const API = 'http://20.5.146.110:3000';
+    const API = 'https://slinging-roundish-backrest.ngrok-free.dev';
 
     async function handleSubmit(e) {
       e.preventDefault();
@@ -210,25 +210,19 @@
       const btn = document.getElementById('submitBtn');
       const btnText = document.getElementById('submitBtnText');
 
-      // Validate passwords match
       if (password !== confirmPassword) {
         showNotice('❌', 'Passwords do not match', 'Please make sure both password fields are the same.');
         return;
       }
-
-      // Validate password length
       if (password.length < 8) {
         showNotice('❌', 'Password too short', 'Password must be at least 8 characters.');
         return;
       }
-
-      // Validate terms
       if (!document.getElementById('terms').checked) {
         showNotice('⚠️', 'Terms required', 'Please agree to the Terms of Service to continue.');
         return;
       }
 
-      // Loading state
       btn.disabled = true;
       btnText.textContent = 'Creating account...';
 
@@ -253,10 +247,8 @@
         const data = await response.json();
 
         if (data.success) {
-          // Save token and user info
           localStorage.setItem('lume_token', data.token);
           localStorage.setItem('lume_user', JSON.stringify(data.user));
-          // Redirect to dashboard
           btnText.textContent = 'Redirecting...';
           window.location.href = 'dashboard.html';
         } else {
