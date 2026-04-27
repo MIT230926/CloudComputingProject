@@ -230,17 +230,27 @@
     const CLIENT_ID    = '42041917-b661-4643-9e12-3063d0fd50ea';
     const REDIRECT_URI = 'https://gray-mushroom-012071d00.7.azurestaticapps.net/signin.html';
 
-    // On load: skip to dashboard if already logged in, or handle Azure callback
+    // On load: handle Azure callback FIRST, then check for existing token
     window.addEventListener('load', () => {
+      const params = new URLSearchParams(window.location.search);
+      const code = params.get('code');
+
+      if (code) {
+        // Azure AD returned a code — clear it from the URL immediately
+        // so if the user refreshes, it doesn't try to reuse the code
+        window.history.replaceState({}, document.title, window.location.pathname);
+        // Clear any old token so we don't loop
+        localStorage.removeItem('token');
+        localStorage.removeItem('username');
+        switchTab('microsoft');
+        handleAzureCallback(code);
+        return;
+      }
+
+      // No code in URL — if already logged in go to dashboard
       if (localStorage.getItem('token')) {
         window.location.href = 'dashboard.html';
         return;
-      }
-      const params = new URLSearchParams(window.location.search);
-      const code = params.get('code');
-      if (code) {
-        switchTab('microsoft');
-        handleAzureCallback(code);
       }
     });
 
