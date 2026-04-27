@@ -88,18 +88,18 @@
         <div class="form-row form-row--2col">
           <div class="field">
             <label for="firstName">First name</label>
-            <input type="text" id="firstName" name="firstName" placeholder="e.g. Alex" autocomplete="given-name"/>
+            <input type="text" id="firstName" name="firstName" placeholder="e.g. Alex" autocomplete="given-name" required/>
           </div>
           <div class="field">
             <label for="lastName">Last name</label>
-            <input type="text" id="lastName" name="lastName" placeholder="e.g. Morgan" autocomplete="family-name"/>
+            <input type="text" id="lastName" name="lastName" placeholder="e.g. Morgan" autocomplete="family-name" required/>
           </div>
         </div>
 
         <!-- Email -->
         <div class="field">
           <label for="email">Email address</label>
-          <input type="email" id="email" name="email" placeholder="you@example.com" autocomplete="email"/>
+          <input type="email" id="email" name="email" placeholder="you@example.com" autocomplete="email" required/>
         </div>
 
         <!-- Phone -->
@@ -125,14 +125,14 @@
           <div class="field">
             <label for="password">Password</label>
             <div class="input-wrap">
-              <input type="password" id="password" name="password" placeholder="Min. 8 characters"/>
+              <input type="password" id="password" name="password" placeholder="Min. 8 characters" required/>
               <button type="button" class="toggle-pw" onclick="togglePassword('password', this)" aria-label="Show password">👁</button>
             </div>
           </div>
           <div class="field">
             <label for="confirmPassword">Confirm password</label>
             <div class="input-wrap">
-              <input type="password" id="confirmPassword" name="confirmPassword" placeholder="Repeat password"/>
+              <input type="password" id="confirmPassword" name="confirmPassword" placeholder="Repeat password" required/>
               <button type="button" class="toggle-pw" onclick="togglePassword('confirmPassword', this)" aria-label="Show password">👁</button>
             </div>
           </div>
@@ -177,8 +177,8 @@
         </label>
 
         <!-- Submit -->
-        <button type="submit" class="btn btn--primary submit-btn">
-          <span class="submit-btn__text">Create My Account</span>
+        <button type="submit" class="btn btn--primary submit-btn" id="submitBtn">
+          <span class="submit-btn__text" id="submitBtnText">Create My Account</span>
           <span class="submit-btn__icon">→</span>
         </button>
 
@@ -186,12 +186,12 @@
 
       </form>
 
-      <!-- ✅ FIXED: Notice element was missing — handleSubmit() references this id -->
+      <!-- Success / error notice -->
       <div class="notice" id="notice" style="display:none;">
-        <span class="notice__icon">🎉</span>
+        <span class="notice__icon" id="noticeIcon">🎉</span>
         <div>
-          <strong>You're on the list!</strong>
-          <p>Our full signup portal is launching shortly. We'll email you the moment your account is ready.</p>
+          <strong id="noticeTitle">Success</strong>
+          <p id="noticeMsg">Your account has been created.</p>
         </div>
       </div>
 
@@ -199,70 +199,100 @@
 
   </main>
 
- <script>
-async function handleSubmit(e) {
-  e.preventDefault();
-  const form = document.getElementById('signupForm');
-  const notice = document.getElementById('notice');
-  const password = document.getElementById('password').value;
-  const confirmPassword = document.getElementById('confirmPassword').value;
+  <script>
+    const API = 'http://20.5.146.110:3000';
 
-  if (password !== confirmPassword) {
-    alert('Passwords do not match');
-    return;
-  }
+    async function handleSubmit(e) {
+      e.preventDefault();
 
-  if (!document.getElementById('terms').checked) {
-    alert('Please agree to the Terms of Service');
-    return;
-  }
+      const password = document.getElementById('password').value;
+      const confirmPassword = document.getElementById('confirmPassword').value;
+      const btn = document.getElementById('submitBtn');
+      const btnText = document.getElementById('submitBtnText');
 
-  const btn = form.querySelector('.submit-btn');
-  btn.disabled = true;
-  btn.querySelector('.submit-btn__text').textContent = 'Creating account...';
+      // Validate passwords match
+      if (password !== confirmPassword) {
+        showNotice('❌', 'Passwords do not match', 'Please make sure both password fields are the same.');
+        return;
+      }
 
-  const payload = {
-    firstName: document.getElementById('firstName').value,
-    lastName: document.getElementById('lastName').value,
-    email: document.getElementById('email').value,
-    password,
-    phone: document.getElementById('phone').value,
-    dob: document.getElementById('dob').value,
-    address: document.getElementById('address').value,
-    accountType: document.querySelector('input[name="accountType"]:checked').value
-  };
+      // Validate password length
+      if (password.length < 8) {
+        showNotice('❌', 'Password too short', 'Password must be at least 8 characters.');
+        return;
+      }
 
-  try {
-    const response = await fetch('http://20.5.146.110:3000/api/register', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(payload)
-    });
-    const data = await response.json();
-    if (data.success) {
-      localStorage.setItem('lume_token', data.token);
-      localStorage.setItem('lume_user', JSON.stringify(data.user));
-      window.location.href = 'dashboard.html';
-    } else {
-      alert(data.message || 'Registration failed');
-      btn.disabled = false;
-      btn.querySelector('.submit-btn__text').textContent = 'Create My Account';
+      // Validate terms
+      if (!document.getElementById('terms').checked) {
+        showNotice('⚠️', 'Terms required', 'Please agree to the Terms of Service to continue.');
+        return;
+      }
+
+      // Loading state
+      btn.disabled = true;
+      btnText.textContent = 'Creating account...';
+
+      const payload = {
+        firstName: document.getElementById('firstName').value.trim(),
+        lastName: document.getElementById('lastName').value.trim(),
+        email: document.getElementById('email').value.trim(),
+        password: password,
+        phone: document.getElementById('phone').value.trim(),
+        dob: document.getElementById('dob').value,
+        address: document.getElementById('address').value.trim(),
+        accountType: document.querySelector('input[name="accountType"]:checked').value
+      };
+
+      try {
+        const response = await fetch(API + '/api/register', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload)
+        });
+
+        const data = await response.json();
+
+        if (data.success) {
+          // Save token and user info
+          localStorage.setItem('lume_token', data.token);
+          localStorage.setItem('lume_user', JSON.stringify(data.user));
+          // Redirect to dashboard
+          btnText.textContent = 'Redirecting...';
+          window.location.href = 'dashboard.html';
+        } else {
+          showNotice('❌', 'Registration failed', data.message || 'Something went wrong. Please try again.');
+          btn.disabled = false;
+          btnText.textContent = 'Create My Account';
+        }
+
+      } catch (err) {
+        console.error('Registration error:', err);
+        showNotice('⚠️', 'Connection error', 'Could not reach the server. Make sure the backend is running.');
+        btn.disabled = false;
+        btnText.textContent = 'Create My Account';
+      }
     }
-  } catch (err) {
-    alert('Could not connect to server. Please try again.');
-    btn.disabled = false;
-    btn.querySelector('.submit-btn__text').textContent = 'Create My Account';
-  }
-}
 
-function togglePassword(fieldId, btn) {
-  const input = document.getElementById(fieldId);
-  if (input.type === 'password') {
-    input.type = 'text';
-    btn.style.opacity = '1';
-  } else {
-    input.type = 'password';
-    btn.style.opacity = '0.45';
-  }
-}
-</script>
+    function showNotice(icon, title, msg) {
+      const notice = document.getElementById('notice');
+      document.getElementById('noticeIcon').textContent = icon;
+      document.getElementById('noticeTitle').textContent = title;
+      document.getElementById('noticeMsg').textContent = msg;
+      notice.style.display = 'flex';
+      notice.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }
+
+    function togglePassword(fieldId, btn) {
+      const input = document.getElementById(fieldId);
+      if (input.type === 'password') {
+        input.type = 'text';
+        btn.style.opacity = '1';
+      } else {
+        input.type = 'password';
+        btn.style.opacity = '0.45';
+      }
+    }
+  </script>
+
+</body>
+</html>

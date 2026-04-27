@@ -112,39 +112,46 @@
           </label>
 
           <!-- Submit -->
-          <button type="submit" class="btn btn--primary submit-btn">
-            <span>Sign In</span>
+          <button type="submit" class="btn btn--primary submit-btn" id="signinBtn">
+            <span id="signinBtnText">Sign In</span>
             <span class="submit-arrow">→</span>
           </button>
 
           <!-- Divider -->
           <div class="or-divider"><span>or continue with</span></div>
 
-          <!-- Social logins (decorative) -->
+          <!-- Social logins -->
           <div class="social-btns">
             <button type="button" class="social-btn" onclick="socialNotice()">
-              <svg width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M17.64 9.2c0-.637-.057-1.251-.164-1.84H9v3.481h4.844c-.209 1.1-.843 2.031-1.796 2.658v2.21h2.908C16.658 14.091 17.64 11.858 17.64 9.2z" fill="#4285F4"/><path d="M9 18c2.43 0 4.467-.806 5.956-2.18l-2.908-2.259c-.806.54-1.837.86-3.048.86-2.344 0-4.328-1.584-5.036-3.711H.957v2.332C2.438 15.983 5.482 18 9 18z" fill="#34A853"/><path d="M3.964 10.71A5.41 5.41 0 0 1 3.682 9c0-.593.102-1.17.282-1.71V4.958H.957A8.996 8.996 0 0 0 0 9c0 1.452.348 2.827.957 4.042l3.007-2.332z" fill="#FBBC05"/><path d="M9 3.58c1.321 0 2.508.454 3.44 1.345l2.582-2.58C13.463.891 11.426 0 9 0 5.482 0 2.438 2.017.957 4.958L3.964 6.29C4.672 4.163 6.656 3.58 9 3.58z" fill="#EA4335"/></svg>
+              <svg width="18" height="18" viewBox="0 0 18 18" fill="none">
+                <path d="M17.64 9.2c0-.637-.057-1.251-.164-1.84H9v3.481h4.844c-.209 1.1-.843 2.031-1.796 2.658v2.21h2.908C16.658 14.091 17.64 11.858 17.64 9.2z" fill="#4285F4"/>
+                <path d="M9 18c2.43 0 4.467-.806 5.956-2.18l-2.908-2.259c-.806.54-1.837.86-3.048.86-2.344 0-4.328-1.584-5.036-3.711H.957v2.332C2.438 15.983 5.482 18 9 18z" fill="#34A853"/>
+                <path d="M3.964 10.71A5.41 5.41 0 0 1 3.682 9c0-.593.102-1.17.282-1.71V4.958H.957A8.996 8.996 0 0 0 0 9c0 1.452.348 2.827.957 4.042l3.007-2.332z" fill="#FBBC05"/>
+                <path d="M9 3.58c1.321 0 2.508.454 3.44 1.345l2.582-2.58C13.463.891 11.426 0 9 0 5.482 0 2.438 2.017.957 4.958L3.964 6.29C4.672 4.163 6.656 3.58 9 3.58z" fill="#EA4335"/>
+              </svg>
               Google
             </button>
             <button type="button" class="social-btn" onclick="socialNotice()">
-              <svg width="18" height="18" viewBox="0 0 18 18" fill="currentColor"><path d="M9 0C4.03 0 0 4.03 0 9c0 3.98 2.58 7.35 6.16 8.54.45.08.61-.2.61-.44v-1.53c-2.5.54-3.03-1.2-3.03-1.2-.41-1.04-1-1.32-1-1.32-.82-.56.06-.55.06-.55.9.06 1.38.93 1.38.93.8 1.37 2.1.97 2.61.74.08-.58.31-.97.57-1.19-1.99-.23-4.08-1-4.08-4.43 0-.98.35-1.78.93-2.41-.09-.23-.4-1.14.09-2.37 0 0 .76-.24 2.49.93A8.66 8.66 0 0 1 9 4.28c.77 0 1.54.1 2.26.3 1.72-1.17 2.48-.93 2.48-.93.49 1.23.18 2.14.09 2.37.58.63.92 1.43.92 2.41 0 3.44-2.1 4.2-4.1 4.42.32.28.61.83.61 1.67v2.47c0 .24.16.53.62.44A9.01 9.01 0 0 0 18 9c0-4.97-4.03-9-9-9z"/></svg>
+              <svg width="18" height="18" viewBox="0 0 18 18" fill="currentColor">
+                <path d="M9 0C4.03 0 0 4.03 0 9c0 3.98 2.58 7.35 6.16 8.54.45.08.61-.2.61-.44v-1.53c-2.5.54-3.03-1.2-3.03-1.2-.41-1.04-1-1.32-1-1.32-.82-.56.06-.55.06-.55.9.06 1.38.93 1.38.93.8 1.37 2.1.97 2.61.74.08-.58.31-.97.57-1.19-1.99-.23-4.08-1-4.08-4.43 0-.98.35-1.78.93-2.41-.09-.23-.4-1.14.09-2.37 0 0 .76-.24 2.49.93A8.66 8.66 0 0 1 9 4.28c.77 0 1.54.1 2.26.3 1.72-1.17 2.48-.93 2.48-.93.49 1.23.18 2.14.09 2.37.58.63.92 1.43.92 2.41 0 3.44-2.1 4.2-4.1 4.42.32.28.61.83.61 1.67v2.47c0 .24.16.53.62.44A9.01 9.01 0 0 0 18 9c0-4.97-4.03-9-9-9z"/>
+              </svg>
               GitHub
             </button>
           </div>
 
         </form>
 
-        <!-- Notice (shown on submit) -->
+        <!-- Error / success notice -->
         <div class="notice" id="signinNotice" style="display:none;">
-          <span class="notice__icon">🔐</span>
+          <span class="notice__icon" id="signinNoticeIcon">⚠️</span>
           <div>
-            <strong>Login coming soon</strong>
-            <p>Our secure portal is launching shortly. We'll send you an email when it's ready.</p>
+            <strong id="signinNoticeTitle">Error</strong>
+            <p id="signinNoticeMsg">Something went wrong.</p>
           </div>
         </div>
 
         <!-- Social notice -->
-        <div class="notice notice--subtle" id="socialNotice" style="display:none;">
+        <div class="notice notice--subtle" id="socialNoticeBox" style="display:none;">
           <span class="notice__icon">🚧</span>
           <div>
             <strong>Not available yet</strong>
@@ -159,70 +166,89 @@
 
   </main>
 
-<script>
-async function handleSubmit(e) {
-  e.preventDefault();
-  const form = document.getElementById('signupForm');
-  const notice = document.getElementById('notice');
-  const password = document.getElementById('password').value;
-  const confirmPassword = document.getElementById('confirmPassword').value;
+  <script>
+    const API = 'http://20.5.146.110:3000';
 
-  if (password !== confirmPassword) {
-    alert('Passwords do not match');
-    return;
-  }
+    async function handleSignin(e) {
+      e.preventDefault();
 
-  if (!document.getElementById('terms').checked) {
-    alert('Please agree to the Terms of Service');
-    return;
-  }
+      const email = document.getElementById('signinEmail').value.trim();
+      const password = document.getElementById('signinPassword').value;
+      const btn = document.getElementById('signinBtn');
+      const btnText = document.getElementById('signinBtnText');
+      const notice = document.getElementById('signinNotice');
 
-  const btn = form.querySelector('.submit-btn');
-  btn.disabled = true;
-  btn.querySelector('.submit-btn__text').textContent = 'Creating account...';
+      // Hide any old notice
+      notice.style.display = 'none';
 
-  const payload = {
-    firstName: document.getElementById('firstName').value,
-    lastName: document.getElementById('lastName').value,
-    email: document.getElementById('email').value,
-    password,
-    phone: document.getElementById('phone').value,
-    dob: document.getElementById('dob').value,
-    address: document.getElementById('address').value,
-    accountType: document.querySelector('input[name="accountType"]:checked').value
-  };
+      // Basic validation
+      if (!email || !password) {
+        showNotice('⚠️', 'Missing fields', 'Please enter your email and password.');
+        return;
+      }
 
-  try {
-    const response = await fetch('http://20.5.146.110:3000/api/register', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(payload)
-    });
-    const data = await response.json();
-    if (data.success) {
-      localStorage.setItem('lume_token', data.token);
-      localStorage.setItem('lume_user', JSON.stringify(data.user));
-      window.location.href = 'dashboard.html';
-    } else {
-      alert(data.message || 'Registration failed');
-      btn.disabled = false;
-      btn.querySelector('.submit-btn__text').textContent = 'Create My Account';
+      // Loading state
+      btn.disabled = true;
+      btnText.textContent = 'Signing in...';
+
+      try {
+        const response = await fetch(API + '/api/login', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ email, password })
+        });
+
+        const data = await response.json();
+
+        if (data.success) {
+          // Save token and user info
+          localStorage.setItem('lume_token', data.token);
+          localStorage.setItem('lume_user', JSON.stringify(data.user));
+          // Redirect to dashboard
+          btnText.textContent = 'Redirecting...';
+          window.location.href = 'dashboard.html';
+        } else {
+          showNotice('❌', 'Login failed', data.message || 'Invalid email or password.');
+          btn.disabled = false;
+          btnText.textContent = 'Sign In';
+        }
+
+      } catch (err) {
+        console.error('Login error:', err);
+        showNotice('⚠️', 'Connection error', 'Could not reach the server. Is the backend running?');
+        btn.disabled = false;
+        btnText.textContent = 'Sign In';
+      }
     }
-  } catch (err) {
-    alert('Could not connect to server. Please try again.');
-    btn.disabled = false;
-    btn.querySelector('.submit-btn__text').textContent = 'Create My Account';
-  }
-}
 
-function togglePassword(fieldId, btn) {
-  const input = document.getElementById(fieldId);
-  if (input.type === 'password') {
-    input.type = 'text';
-    btn.style.opacity = '1';
-  } else {
-    input.type = 'password';
-    btn.style.opacity = '0.45';
-  }
-}
-</script>
+    function showNotice(icon, title, msg) {
+      const notice = document.getElementById('signinNotice');
+      document.getElementById('signinNoticeIcon').textContent = icon;
+      document.getElementById('signinNoticeTitle').textContent = title;
+      document.getElementById('signinNoticeMsg').textContent = msg;
+      notice.style.display = 'flex';
+      notice.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }
+
+    function switchTab(tab, btn) {
+      document.querySelectorAll('.tab').forEach(t => t.classList.remove('tab--active'));
+      btn.classList.add('tab--active');
+      document.querySelectorAll('.tab-panel').forEach(p => p.classList.add('hidden'));
+      document.getElementById('panel-' + tab).classList.remove('hidden');
+    }
+
+    function togglePw(id, btn) {
+      const inp = document.getElementById(id);
+      inp.type = inp.type === 'password' ? 'text' : 'password';
+      btn.style.opacity = inp.type === 'text' ? '1' : '0.45';
+    }
+
+    function socialNotice() {
+      const n = document.getElementById('socialNoticeBox');
+      n.style.display = 'flex';
+      setTimeout(() => { n.style.display = 'none'; }, 3500);
+    }
+  </script>
+
+</body>
+</html>
