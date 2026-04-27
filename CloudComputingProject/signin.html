@@ -236,19 +236,15 @@
       const code = params.get('code');
 
       if (code) {
-        // Azure AD returned a code — clear it from the URL immediately
-        // so if the user refreshes, it doesn't try to reuse the code
         window.history.replaceState({}, document.title, window.location.pathname);
-        // Clear any old token so we don't loop
-        localStorage.removeItem('token');
-        localStorage.removeItem('username');
+        localStorage.removeItem('lume_token');
+        localStorage.removeItem('lume_user');
         switchTab('microsoft');
         handleAzureCallback(code);
         return;
       }
 
-      // No code in URL — if already logged in go to dashboard
-      if (localStorage.getItem('token')) {
+      if (localStorage.getItem('lume_token')) {
         window.location.href = 'dashboard.html';
         return;
       }
@@ -287,9 +283,10 @@
         });
         const data = await res.json();
         if (!res.ok) { showError(data.error || 'Microsoft sign-in failed'); return; }
-        localStorage.setItem('token', data.token);
-        localStorage.setItem('username', data.username);
-        window.history.replaceState({}, document.title, '/signin.html');
+        const nameParts = (data.username || 'Azure User').split(' ');
+        const userObj = { firstName: nameParts[0] || 'User', lastName: nameParts.slice(1).join(' ') || '' };
+        localStorage.setItem('lume_token', data.token);
+        localStorage.setItem('lume_user', JSON.stringify(userObj));
         window.location.href = 'dashboard.html';
       } catch {
         showError('Could not connect to server. Is the backend running?');
@@ -311,8 +308,9 @@
         });
         const data = await res.json();
         if (!res.ok) { showError(data.error || 'Login failed'); return; }
-        localStorage.setItem('token', data.token);
-        localStorage.setItem('username', data.username);
+        const userObj = { firstName: data.username || username, lastName: '' };
+        localStorage.setItem('lume_token', data.token);
+        localStorage.setItem('lume_user', JSON.stringify(userObj));
         window.location.href = 'dashboard.html';
       } catch {
         showError('Could not connect to server. Is the backend running?');
